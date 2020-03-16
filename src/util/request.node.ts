@@ -6,7 +6,7 @@ import {
   request as httpRequest
 } from "http";
 import { Agent as HttpsAgent, request as httpsRequest } from "https";
-import { parse as parseUrl, Url } from "url";
+import { parse as parseUrl } from "url";
 import { btoa } from "./btoa";
 import { joinPath } from "./joinPath";
 import { Errback } from "./types";
@@ -23,7 +23,7 @@ export type ArangojsError = Error & {
 
 export type RequestOptions = {
   method: string;
-  url: Url;
+  url: { pathname: string; search?: string };
   headers: { [key: string]: string };
   body: any;
   expectBinary: boolean;
@@ -57,10 +57,13 @@ export function createRequest(
     const i = baseUrlParts.pathname.indexOf(":");
     if (i === -1) {
       socketPath = baseUrlParts.pathname;
-      baseUrlParts.pathname = undefined;
+      delete baseUrlParts.pathname;
     } else {
       socketPath = baseUrlParts.pathname.slice(0, i);
-      baseUrlParts.pathname = baseUrlParts.pathname.slice(i + 1) || undefined;
+      baseUrlParts.pathname = baseUrlParts.pathname.slice(i + 1);
+      if (baseUrlParts.pathname === "") {
+        delete baseUrlParts.pathname;
+      }
     }
   }
   if (socketPath && !socketPath.replace(/\//g, "").length) {
