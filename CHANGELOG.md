@@ -287,6 +287,10 @@ This is a major release and breaks backwards compatibility.
   Most methods should now provide full type signatures for options and response
   objects.
 
+### Fixed
+
+- Fixed `db.dropFunction` option `group` being ignored
+
 ## [6.14.0] - 2020-03-18
 
 ### Added
