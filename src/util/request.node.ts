@@ -141,7 +141,7 @@ export function createRequest(
         called = true;
         setTimeout(() => {
           callback(e);
-        });
+        }, 0);
       }
     },
     {

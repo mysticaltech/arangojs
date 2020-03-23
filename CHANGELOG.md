@@ -296,6 +296,11 @@ This is a major release and breaks backwards compatibility.
 
 - Fixed `db.dropFunction` option `group` being ignored
 
+- Removed TypeScript dependency on `dom` library
+
+  If you are using arangojs in Node.js, you no longer need to add the `dom`
+  library to your `tsconfig.json` configuration.
+
 ## [6.14.0] - 2020-03-18
 
 ### Added
