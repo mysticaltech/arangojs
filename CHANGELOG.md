@@ -112,6 +112,11 @@ This is a major release and breaks backwards compatibility.
   The method will now return the existing properties or set the properties
   depending on whether an argument is provided.
 
+- Renamed `collection.setQueryTracking` to `collection.queryTracking`
+
+  The method will now return the existing query tracking properties or set the
+  new query tracking properties depending on whether an argument is provided.
+
 - Renamed `db.arangoSearchView` to `db.view`
 
 - Renamed types `ArangoAnalyzer`, `ArangoView` and `ArangoTransaction` to
@@ -138,7 +143,7 @@ This is a major release and breaks backwards compatibility.
   ```js
   db.query(aql`FOR doc IN ${collection} RETURN doc`, {
     cache: false,
-    options: { fullCount: true }
+    options: { fullCount: true },
   });
   ```
 
@@ -147,7 +152,7 @@ This is a major release and breaks backwards compatibility.
   ```js
   db.query(aql`FOR doc IN ${collection} RETURN doc`, {
     cache: false,
-    fullCount: true
+    fullCount: true,
   });
   ```
 
@@ -182,7 +187,7 @@ This is a major release and breaks backwards compatibility.
   await graph.create(
     {
       edgeDefinitions: [{ collection: "edges", from: ["a"], to: ["b"] }],
-      isSmart: true
+      isSmart: true,
     },
     { waitForSync: true }
   );
@@ -193,7 +198,7 @@ This is a major release and breaks backwards compatibility.
   ```js
   await graph.create([{ collection: "edges", from: ["a"], to: ["b"] }], {
     isSmart: true,
-    waitForSync: true
+    waitForSync: true,
   });
   ```
 
@@ -210,7 +215,7 @@ This is a major release and breaks backwards compatibility.
   await graph.replaceEdgeDefinition("edges", {
     collection: "edges", // This is a bit redundant
     from: ["a"],
-    to: ["b"]
+    to: ["b"],
   });
   ```
 
@@ -220,7 +225,7 @@ This is a major release and breaks backwards compatibility.
   await graph.replaceEdgeDefinition({
     collection: "edges",
     from: ["a"],
-    to: ["b"]
+    to: ["b"],
   });
   ```
 
@@ -526,7 +531,7 @@ This is a major release and breaks backwards compatibility.
   ```js
   const users = db.collection("users");
   const keys = ["a", "b", "c"];
-  const fragments = keys.map(key => aql`DOCUMENT(${users}, ${key})`);
+  const fragments = keys.map((key) => aql`DOCUMENT(${users}, ${key})`);
   const combined = aql`[${aql.join(fragments, ", ")}]`;
   // [DOCUMENT(@@value0, @value1), DOCUMENT(@@value0, @value2), \
   // DOCUMENT(@@value0, @value3)]
