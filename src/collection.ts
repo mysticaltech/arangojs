@@ -8,7 +8,7 @@ import {
   DocumentSelector,
   Edge,
   EdgeData,
-  _documentHandle
+  _documentHandle,
 } from "./documents";
 import { isArangoError } from "./error";
 import {
@@ -26,7 +26,7 @@ import {
   PersistentIndex,
   SkiplistIndex,
   TtlIndex,
-  _indexHandle
+  _indexHandle,
 } from "./indexes";
 import { Blob } from "./lib/blob";
 import { COLLECTION_NOT_FOUND, DOCUMENT_NOT_FOUND } from "./util/codes";
@@ -56,7 +56,7 @@ export interface ArangoCollection {
 
 export enum CollectionType {
   DOCUMENT_COLLECTION = 2,
-  EDGE_COLLECTION = 3
+  EDGE_COLLECTION = 3,
 }
 
 export enum CollectionStatus {
@@ -65,7 +65,7 @@ export enum CollectionStatus {
   LOADED = 3,
   UNLOADING = 4,
   DELETED = 5,
-  LOADING = 6
+  LOADING = 6,
 }
 
 export type KeyGenerator = "traditional" | "autoincrement" | "uuid" | "padded";
@@ -863,7 +863,7 @@ export class Collection<T extends object = any>
   protected _get(path: string, qs?: any) {
     return this._db.request(
       { path: `/_api/collection/${this._name}/${path}`, qs },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -872,9 +872,9 @@ export class Collection<T extends object = any>
       {
         method: "PUT",
         path: `/_api/collection/${this._name}/${path}`,
-        body
+        body,
       },
-      res => res.body
+      (res) => res.body
     );
   }
   //#endregion
@@ -891,7 +891,7 @@ export class Collection<T extends object = any>
   get() {
     return this._db.request(
       { path: `/_api/collection/${this._name}` },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -931,10 +931,10 @@ export class Collection<T extends object = any>
         qs,
         body: {
           ...opts,
-          name: this.name
-        }
+          name: this.name,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -975,9 +975,9 @@ export class Collection<T extends object = any>
       {
         method: "PUT",
         path: `/_api/collection/${this._name}/rename`,
-        body: { name }
+        body: { name },
       },
-      res => res.body
+      (res) => res.body
     );
     this._name = name;
     this._idPrefix = `${name}/`;
@@ -998,9 +998,9 @@ export class Collection<T extends object = any>
       {
         method: "DELETE",
         path: `/_api/collection/${this._name}`,
-        qs: options
+        qs: options,
       },
-      res => res.body
+      (res) => res.body
     );
   }
   //#endregion
@@ -1011,9 +1011,9 @@ export class Collection<T extends object = any>
       {
         method: "PUT",
         path: `/_api/collection/${this.name}/responsibleShard`,
-        body: document
+        body: document,
       },
-      res => res.body.shardId
+      (res) => res.body.shardId
     );
   }
 
@@ -1026,11 +1026,11 @@ export class Collection<T extends object = any>
       .request(
         {
           method: "HEAD",
-          path: `/_api/document/${_documentHandle(selector, this._name)}`
+          path: `/_api/document/${_documentHandle(selector, this._name)}`,
         },
         () => true
       )
-      .catch(err => {
+      .catch((err) => {
         if (err.statusCode === 404) {
           return false;
         }
@@ -1049,12 +1049,12 @@ export class Collection<T extends object = any>
     const result = this._db.request(
       {
         path: `/_api/document/${_documentHandle(selector, this._name)}`,
-        allowDirtyRead
+        allowDirtyRead,
       },
-      res => res.body
+      (res) => res.body
     );
     if (!graceful) return result;
-    return result.catch(err => {
+    return result.catch((err) => {
       if (isArangoError(err) && err.errorNum === DOCUMENT_NOT_FOUND) {
         return null;
       }
@@ -1075,9 +1075,9 @@ export class Collection<T extends object = any>
         method: "POST",
         path: `/_api/document/${this._name}`,
         body: data,
-        qs: options
+        qs: options,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1087,9 +1087,9 @@ export class Collection<T extends object = any>
         method: "POST",
         path: `/_api/document/${this._name}`,
         body: data,
-        qs: options
+        qs: options,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1103,9 +1103,9 @@ export class Collection<T extends object = any>
         method: "PUT",
         path: `/_api/document/${_documentHandle(selector, this._name)}`,
         body: newValue,
-        qs: options
+        qs: options,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1118,9 +1118,9 @@ export class Collection<T extends object = any>
         method: "PUT",
         path: `/_api/document/${this._name}`,
         body: newValues,
-        qs: options
+        qs: options,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1134,9 +1134,9 @@ export class Collection<T extends object = any>
         method: "PATCH",
         path: `/_api/document/${_documentHandle(selector, this._name)}`,
         body: newValue,
-        qs: options
+        qs: options,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1151,9 +1151,9 @@ export class Collection<T extends object = any>
         method: "PATCH",
         path: `/_api/document/${this._name}`,
         body: newValues,
-        qs: options
+        qs: options,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1162,9 +1162,9 @@ export class Collection<T extends object = any>
       {
         method: "DELETE",
         path: `/_api/document/${_documentHandle(selector, this._name)}`,
-        qs: options
+        qs: options,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1177,9 +1177,9 @@ export class Collection<T extends object = any>
         method: "DELETE",
         path: `/_api/document/${this._name}`,
         body: selectors,
-        qs: options
+        qs: options,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1201,10 +1201,10 @@ export class Collection<T extends object = any>
         qs: {
           type: type === null ? undefined : type,
           ...options,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
   //#endregion
@@ -1216,10 +1216,10 @@ export class Collection<T extends object = any>
         path: `/_api/edges/${this._name}`,
         qs: {
           direction,
-          vertex: _documentHandle(selector, this._name)
-        }
+          vertex: _documentHandle(selector, this._name),
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1243,10 +1243,10 @@ export class Collection<T extends object = any>
         body: {
           ...options,
           startVertex,
-          edgeCollection: this._name
-        }
+          edgeCollection: this._name,
+        },
       },
-      res => res.body.result
+      (res) => res.body.result
     );
   }
   //#endregion
@@ -1257,9 +1257,9 @@ export class Collection<T extends object = any>
       {
         method: "PUT",
         path: "/_api/simple/all-keys",
-        body: { type, collection: this._name }
+        body: { type, collection: this._name },
       },
-      res => new ArrayCursor(this._db, res.body, res.arangojsHostId)
+      (res) => new ArrayCursor(this._db, res.body, res.arangojsHostId)
     );
   }
 
@@ -1270,10 +1270,10 @@ export class Collection<T extends object = any>
         path: "/_api/simple/all",
         body: {
           ...options,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => new ArrayCursor(this._db, res.body, res.arangojsHostId)
+      (res) => new ArrayCursor(this._db, res.body, res.arangojsHostId)
     );
   }
 
@@ -1282,9 +1282,9 @@ export class Collection<T extends object = any>
       {
         method: "PUT",
         path: "/_api/simple/any",
-        body: { collection: this._name }
+        body: { collection: this._name },
       },
-      res => res.body.document
+      (res) => res.body.document
     );
   }
 
@@ -1299,10 +1299,10 @@ export class Collection<T extends object = any>
         body: {
           ...options,
           example,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => new ArrayCursor(this._db, res.body, res.arangojsHostId)
+      (res) => new ArrayCursor(this._db, res.body, res.arangojsHostId)
     );
   }
 
@@ -1313,10 +1313,10 @@ export class Collection<T extends object = any>
         path: "/_api/simple/first-example",
         body: {
           example,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => res.body.document
+      (res) => res.body.document
     );
   }
 
@@ -1331,10 +1331,10 @@ export class Collection<T extends object = any>
         body: {
           ...options,
           example,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1351,10 +1351,10 @@ export class Collection<T extends object = any>
           ...options,
           example,
           newValue,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1371,10 +1371,10 @@ export class Collection<T extends object = any>
           ...options,
           example,
           newValue,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1385,10 +1385,10 @@ export class Collection<T extends object = any>
         path: "/_api/simple/lookup-by-keys",
         body: {
           keys,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => res.body.documents
+      (res) => res.body.documents
     );
   }
 
@@ -1400,10 +1400,10 @@ export class Collection<T extends object = any>
         body: {
           options: options,
           keys,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
   //#endregion
@@ -1413,16 +1413,16 @@ export class Collection<T extends object = any>
     return this._db.request(
       {
         path: "/_api/index",
-        qs: { collection: this._name }
+        qs: { collection: this._name },
       },
-      res => res.body.indexes
+      (res) => res.body.indexes
     );
   }
 
   index(selector: IndexSelector) {
     return this._db.request(
       { path: `/_api/index/${_indexHandle(selector, this._name)}` },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1440,9 +1440,9 @@ export class Collection<T extends object = any>
         method: "POST",
         path: "/_api/index",
         body: options,
-        qs: { collection: this._name }
+        qs: { collection: this._name },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1450,9 +1450,9 @@ export class Collection<T extends object = any>
     return this._db.request(
       {
         method: "DELETE",
-        path: `/_api/index/${_indexHandle(selector, this._name)}`
+        path: `/_api/index/${_indexHandle(selector, this._name)}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -1470,10 +1470,10 @@ export class Collection<T extends object = any>
           index: index ? _indexHandle(index, this._name) : undefined,
           attribute,
           query,
-          collection: this._name
-        }
+          collection: this._name,
+        },
       },
-      res => new ArrayCursor(this._db, res.body, res.arangojsHostId)
+      (res) => new ArrayCursor(this._db, res.body, res.arangojsHostId)
     );
   }
   //#endregion
